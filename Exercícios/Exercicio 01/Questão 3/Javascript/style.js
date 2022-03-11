@@ -4,8 +4,6 @@ function Aluno(nome, idade, email, matricula, curso){
     this.email = email;
     this.matricula = matricula;
     this.curso = curso
-
-
 }
 
 let Aluno1 = new Aluno("Josué", 25, "josuerodrigo.jr80@gmail.com", 0215454, "Web Full Strack");
