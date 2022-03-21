@@ -3,16 +3,24 @@ class Conta{
     #saldo
 
 
+<<<<<<< HEAD
     constructor(nome ,conta, agencia, saldo, tipoDeconta){
+=======
+    constructor(nome ,conta, agencia, saldo){
+>>>>>>> eea21f8b35e6727d73f9d9bb1a938cfc8b4acc4f
         this.nome = nome,
         this.conta = conta;
         this.agencia = agencia;
         this.#saldo = saldo;
         this.operacao = " ";
         this.valor = 0;
+<<<<<<< HEAD
         this.juros = 0;
         this.tipoDeconta = tipoDeconta;
         this.Data = ""; 
+=======
+       
+>>>>>>> eea21f8b35e6727d73f9d9bb1a938cfc8b4acc4f
     }
 
     transferencia (valorDaTranferencia){
@@ -52,6 +60,7 @@ class Conta{
         return `Seu saldo é ${this.#saldo.toFixed(2)}`
     }
 
+<<<<<<< HEAD
     lancamento (){
         let movimentacao = {};
         if (this.operacao == "Deposito"){
@@ -127,7 +136,40 @@ class Conta{
         this.#saldo =  - montante;
         console.log(this.#saldo)
         return saldoNegativo;
+=======
+    lancamento (nome, operacao, valor){
+        let movimentacao = {};
+        if (this.operacao == "Deposito"){
+>>>>>>> eea21f8b35e6727d73f9d9bb1a938cfc8b4acc4f
 
+        }
+        movimentacao = {
+            Nome: this.nome,
+            Operacao: this.operacao,
+            Valor: this.valor,
+            Saldo: this.#saldo,
+            Horario: new Date(),
+
+        }
+        return movimentacao
+    }
+
+    juros(vencimento, pagamento){
+        const data1 = new Date(vencimento);
+        const data2 = new Date();
+        var tempoVencimento = Math.abs(data2.getTime() - data1.getTime());
+        var diasVencimento = (Math.ceil(tempoVencimento / (1000 * 3600 * 24))) - 1;
+        if (diasVencimento === 1){
+            pagamento = pagamento + pagamento*0.01;
+            return `O valor que você deve pagar é ${pagamento.toFixed(2)}, seu boleto está ${diasVencimento} dia atrasado`
+        } else if (diasVencimento === 2){
+            pagamento = pagamento + pagamento*0.025;
+            return `O valor que você deve pagar é ${pagamento.toFixed(2)}, seu boleto está ${diasVencimento} dias atrasado`
+        } else {
+            pagamento = pagamento*(1 + 0.025)**diasVencimento;
+            return `O valor que você deve pagar é ${pagamento.toFixed(2)}, seu boleto está ${diasVencimento} dias atrasado`
+        }
+        
     }
 
     
@@ -145,6 +187,15 @@ class PF extends Conta{
     }
     get dadosPf(){
         return `Seu nome é ${this.nome}, do CPF ${this.#CPF}, do número da RG ${this.#rg}, sua conta é ${this.conta} e agência ${this.agencia}`
+<<<<<<< HEAD
+=======
+    }
+    get CPF(){
+        return `${this.#CPF}`
+    }
+    get RG(){
+        return `${this.#rg}`
+>>>>>>> eea21f8b35e6727d73f9d9bb1a938cfc8b4acc4f
     }
     get CPF(){
         return `${this.#CPF}`
@@ -175,6 +226,7 @@ class PJ extends PF{
 
 }
 
+<<<<<<< HEAD
 const teste = new Conta("Josue",02020, 01010, 1000, "PF")
 teste.transferencia(1000);
 console.log(teste.saldo)
@@ -185,3 +237,17 @@ console.log(teste.saldo)
 console.log(teste.chequeEspecial())
 teste.deposito(600);
 console.log(teste.saldo)
+=======
+const teste = new Conta("Josue",02020, 01010, 1000)
+// console.log(teste.dadosPf)
+teste.deposito(500)
+
+// console.log(teste.lancamento())
+
+teste.transferencia(500)
+
+// console.log(teste.lancamento())
+
+
+console.log(teste.juros("3/14/2022", 100))
+>>>>>>> eea21f8b35e6727d73f9d9bb1a938cfc8b4acc4f
