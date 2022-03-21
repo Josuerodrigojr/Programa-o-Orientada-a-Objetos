@@ -3,14 +3,16 @@ class Conta{
     #saldo
 
 
-    constructor(nome ,conta, agencia, saldo){
+    constructor(nome ,conta, agencia, saldo, tipoDeconta){
         this.nome = nome,
         this.conta = conta;
         this.agencia = agencia;
         this.#saldo = saldo;
         this.operacao = " ";
         this.valor = 0;
-       
+        this.juros = 0;
+        this.tipoDeconta = tipoDeconta;
+        this.Data = ""; 
     }
 
     transferencia (valorDaTranferencia){
@@ -20,6 +22,8 @@ class Conta{
             this.#saldo = this.#saldo - valorDaTranferencia;
             return `Seu saldo é ${this.#saldo} e foi transferido ${valorDaTranferencia}`
         } else {
+            this.alternativa = true;
+            this.#saldo() = this.#saldo - valorDaTranferencia;
             return ("Não é possivel transferir")
         }
     }
@@ -32,6 +36,8 @@ class Conta{
             return `Seu saldo é ${this.#saldo} e foi sacado ${valorDoSaque}`
             
         } else {
+            this.alternativa = true;
+            this.#saldo = this.#saldo - valorDoSaque;
             return ("Não é possivel sacar")
         }
     }
@@ -43,10 +49,10 @@ class Conta{
     }
 
     get saldo(){
-        return `Seu saldo é ${this.#saldo}`
+        return `Seu saldo é ${this.#saldo.toFixed(2)}`
     }
 
-    lancamento (nome, operacao, valor){
+    lancamento (){
         let movimentacao = {};
         if (this.operacao == "Deposito"){
 
@@ -69,16 +75,62 @@ class Conta{
         var diasVencimento = (Math.ceil(tempoVencimento / (1000 * 3600 * 24))) - 1;
         if (diasVencimento === 1){
             pagamento = pagamento + pagamento*0.01;
+            this.#saldo = this.#saldo - pagamento;
             return `O valor que você deve pagar é ${pagamento.toFixed(2)}, seu boleto está ${diasVencimento} dia atrasado`
         } else if (diasVencimento === 2){
+
             pagamento = pagamento + pagamento*0.025;
+            this.#saldo = this.#saldo - pagamento;
             return `O valor que você deve pagar é ${pagamento.toFixed(2)}, seu boleto está ${diasVencimento} dias atrasado`
         } else {
             pagamento = pagamento*(1 + 0.025)**diasVencimento;
+            this.#saldo = this.#saldo - pagamento;
             return `O valor que você deve pagar é ${pagamento.toFixed(2)}, seu boleto está ${diasVencimento} dias atrasado`
         }
         
+
+        
     }
+    
+    leasing(alternativa = false){
+        if(alternativa === true){
+            console.log("Temos a opção do cheque especial, como você não conseguiu efetuar sua operação")
+            if (this.tipoDeconta === "PJ"){
+                this.juros = 0.01;
+                this.Data = new Date();
+                return `Você vai pagar uma taxa de juros de 1% por dia, seu saldo é de ${this.#saldo}`
+            } else {
+                this.juros = 0.005;
+                this.Data = new Date();
+                return `Você vai pagar uma taxa de juros de 0,5% por dia, seu saldo é de ${this.#saldo}`
+            }
+            
+        }
+
+        
+    }
+    chequeEspecial(){
+        const data1 = new Date(this.Data);
+        const data2 = new Date();
+        var tempo = Math.abs(data2.getTime() - data1.getTime());
+        var dias = (Math.ceil(tempo / (1000 * 3600 * 24)));
+        console.log(dias)
+        let montante = Math.abs(this.#saldo*(1 + this.juros)**(dias));
+        console.log(montante)
+
+        let saldoNegativo = {
+            SaldoNegativo: this.#saldo,
+            JurosDiarios: this.juros,
+            Data: this.Data,
+            JurosAcumulado: montante - Math.abs(this.#saldo),
+        }
+        this.#saldo =  - montante;
+        console.log(this.#saldo)
+        return saldoNegativo;
+
+    }
+
+    
 }
 
 
@@ -100,6 +152,7 @@ class PF extends Conta{
     get RG(){
         return `${this.#rg}`
     }
+    
 
 }
 
@@ -122,15 +175,13 @@ class PJ extends PF{
 
 }
 
-const teste = new Conta("Josue",02020, 01010, 1000)
-// console.log(teste.dadosPf)
-teste.deposito(500)
-
-// console.log(teste.lancamento())
-
-teste.transferencia(500)
-
-// console.log(teste.lancamento())
-
-
-console.log(teste.juros("3/14/2022", 100))
+const teste = new Conta("Josue",02020, 01010, 1000, "PF")
+teste.transferencia(1000);
+console.log(teste.saldo)
+teste.saque(500);
+console.log(teste.saldo)
+console.log(teste.leasing(true))
+console.log(teste.saldo)
+console.log(teste.chequeEspecial())
+teste.deposito(600);
+console.log(teste.saldo)
